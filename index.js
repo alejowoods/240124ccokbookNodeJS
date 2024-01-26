@@ -1,49 +1,11 @@
-const http = require("node:http");
-const PORT = 8000;
+import express from 'express';
+import recipesRouter from './routes/recipesRouter.js';
 
-const server = http.createServer((req, res) => {
-    console.log(req.url, 'url')
-    if(req.url === '/testRoute'){
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
+const app = express();
+const port = 8000;
 
-        const data = {
-            message: "Hello test route",
-            timestamp: new Date().toISOString()
-        };
+app.use('/recipes', recipesRouter);
 
-        const jsonData = JSON.stringify(data);
-        res.end(jsonData)
-    } else if(req.url === "/"){
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-
-        const data = {
-            message: "Hello root route",
-            timestamp: new Date().toISOString()
-        };
-
-        const jsonData = JSON.stringify(data);
-        res.end(jsonData)
-    }else {
-        res.statusCode = 404;
-        res.setHeader("Content-Type", "application/json");
-
-        const data = {
-            message: "the resource does not exist",
-            timestamp: new Date().toISOString()
-        };
-
-        const jsonData = JSON.stringify(data);
-        res.end(jsonData)
-    }
-    
+app.listen(port, (req, res) => {
+    console.log(`Example app listenting on port ${port}`);
 })
-
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-})
-
-server.on("error", (error) => {
-    console.error(error);
-});
