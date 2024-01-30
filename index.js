@@ -6,6 +6,13 @@ const port = 8000;
 
 app.use('/recipes', recipesRouter);
 
-app.listen(port, (req, res) => {
+app.get("/", (req, res) => {
+    res.send('GET request to the root')
+});
+
+
+    
+
+app.listen(port, () => {
     console.log(`Example app listenting on port ${port}`);
 })
