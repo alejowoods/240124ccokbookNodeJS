@@ -1,10 +1,11 @@
-import { pool } from "../db/pool";
+import { pool } from "../db/pool.js";
 
 export const getRecipes = async (req, res) => {
+    console.log('getRecipes');
     try {
-        const {rows} = await pool.query('SELECT * FROM recipes ');
-        res.json(rows);
+        const {rows} = await pool.query('SELECT * FROM recipes');
         console.log(rows);
+        res.json(rows);
     } catch (error) {
         res.sendStatus(500)
     }
@@ -13,7 +14,7 @@ export const getRecipe = async (req, res) => {
     const {id} = req.params;
     try {
         const {rows} = await pool.query('SELECT * FROM recipes WHERE id = $1 RETURNING *', [id]);
-        res.json(rows);
+        res.json(rows[0]);
         console.log(rows);
         
     } catch (error) {
