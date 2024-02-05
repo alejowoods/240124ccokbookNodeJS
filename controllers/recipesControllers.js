@@ -3,7 +3,22 @@ import { pool } from "../db/pool.js";
 export const getRecipes = async (req, res) => {
     console.log('getRecipes');
     try {
-        const {rows} = await pool.query('SELECT * FROM recipes');
+        // const {rows} = await pool.query('SELECT * FROM recipes');
+        const {rows} = await pool.query(`SELECT 
+        recipes.id, 
+        recipes.title, 
+        recipes.image, 
+        recipes.description, 
+        recipes.instructions,
+        STRING_AGG(CONCAT(quantity.quantity::text, ' ', ingredients.unit, ' ', ingredients.name), ', ') AS ingredients
+      FROM 
+        recipes
+        INNER JOIN 
+        quantity ON recipes.id = quantity.recipe_id
+      INNER JOIN 
+        ingredients ON quantity.ingredient_id = ingredients.id
+      GROUP BY recipes.id;`);
+
         console.log(rows);
         res.json(rows);
     } catch (error) {
@@ -13,7 +28,22 @@ export const getRecipes = async (req, res) => {
 export const getRecipe = async (req, res) => {
     const {id} = req.params;
     try {
-        const {rows} = await pool.query('SELECT * FROM recipes WHERE id = $1 RETURNING *', [id]);
+        const {rows} = await pool.query(`SELECT 
+        recipes.id, 
+        recipes.title, 
+        recipes.image, 
+        recipes.description, 
+        recipes.instructions,
+        STRING_AGG(CONCAT(quantity.quantity::text, ' ', ingredients.unit, ' ', ingredients.name), ', ') AS ingredients
+      FROM 
+        recipes
+        INNER JOIN 
+        quantity ON recipes.id = quantity.recipe_id
+      INNER JOIN 
+        ingredients ON quantity.ingredient_id = ingredients.id
+      WHERE recipes.id = $1;
+
+      `, [id]);
         res.json(rows[0]);
         console.log(rows);
         
