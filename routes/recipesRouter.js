@@ -3,10 +3,10 @@ import  { getRecipes, getRecipe, postRecipe, modifyRecipe, deleteRecipe } from '
 
 const recipesRouter = express.Router();
 
-recipesRouter.get(`/recipes`, getRecipes);
-recipesRouter.get(`/recipes/:id`, getRecipe);
-recipesRouter.get(`/recipes`, postRecipe);
-recipesRouter.get(`/recipes/:id`, modifyRecipe);
-recipesRouter.get(`/recipes/:id`, deleteRecipe);
+recipesRouter.get(`/`, getRecipes);
+recipesRouter.get(`/:id`, getRecipe);
+recipesRouter.post(`/`, postRecipe);
+recipesRouter.put(`/:id`, modifyRecipe);
+recipesRouter.delete(`/:id`, deleteRecipe);
 
 export default recipesRouter;
